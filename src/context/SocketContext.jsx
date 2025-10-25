@@ -8,7 +8,6 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     const newSocket = io(import.meta.env.VITE_BASE_URL || 'http://localhost:5000', {
-      transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000
