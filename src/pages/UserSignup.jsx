@@ -39,13 +39,23 @@ const UserSignup = () => {
         navigate('/home')
       }
     } catch (err) {
+      const errorData = err?.response?.data
       const status = err?.response?.status
-      if (status === 400) {
-        setError('All fields are required')
+      
+      if (errorData?.description) {
+        // Use the detailed description from backend
+        setError(errorData.description)
+      } else if (errorData?.message) {
+        // Fallback to message if no description
+        setError(errorData.message)
+      } else if (status === 400) {
+        setError('Please fill in all required fields correctly.')
       } else if (status === 409) {
-        setError('Email already exists')
+        setError('This email is already registered. Please login or use a different email.')
+      } else if (status >= 500) {
+        setError('Server error. Our servers are experiencing issues. Please try again later.')
       } else {
-        setError('Registration failed. Please try again.')
+        setError('Registration failed. Please check your information and try again.')
       }
     } finally {
       setIsLoading(false)
